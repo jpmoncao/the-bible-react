@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Bíblia</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            width: 60vw;
+            margin: 1rem auto;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            text-align: left;
+        }
+
+        h1 {
+            font-size: 1.4em;
+        }
+
+        h2 {
+            font-size: 1.2em;
+        }
+
+        span {
+            transition: .3s;
+        }
+
+        span.markup {
+            background-color: rgba(0, 255, 255, 0.5);
+            transition: .3s;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <h1 id="book-name"></h1>
+        <h2 id="book-author"></h2>
+        <p id="container"></p>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        const VERSION = 'nvi';
+        const BASE_URL = 'https://www.abibliadigital.com.br/api/verses';
+
+        let abbrev = 'gl';
+        let chapter = 5;
+        let number = 22;
+
+        let bookInfo = {};
+        axios.get(`${BASE_URL}/${VERSION}/${abbrev}/${chapter}`)
+            .then(function (response) {
+                let { book, verses } = response.data;
+                bookInfo = { book, verses };
+
+                generateChapter();
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+
+        function generateChapter() {
+            let { book, verses } = bookInfo;
+
+            const bookName = document.querySelector('#book-name');
+            const bookAuthor = document.querySelector('#book-author');
+            const container = document.querySelector('#container');
+
+            bookName.innerHTML = book.name;
+            bookAuthor.innerHTML = book.author;
+
+            verses.forEach(verse => {
+                const id = abbrev + chapter + ':' + verse.number;
+                container.innerHTML += `<span id="${id}"><sup>${verse.number}</sup> ${verse.text} </span>`;
+            });
+
+            container.querySelectorAll('span').forEach(span =>
+                span.addEventListener('click', (event) => markupVerse(event.target))
+            )
+        }
+
+        function markupVerse(verse) {
+            verse.classList.toggle('markup');
+        }
+    </script>
+</body>
+
+</html>
