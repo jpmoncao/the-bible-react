@@ -12,6 +12,10 @@
             padding: 0;
         }
 
+        body {
+            cursor: default;
+        }
+
         main {
             width: 60vw;
             margin: 1rem auto;
@@ -22,6 +26,10 @@
             align-items: center;
 
             text-align: left;
+        }
+
+        #root.mark {
+            cursor: text;
         }
 
         h1 {
@@ -36,7 +44,7 @@
             transition: .3s;
         }
 
-        span.markup {
+        mark {
             background-color: rgba(0, 255, 255, 0.5);
             transition: .3s;
         }
@@ -44,7 +52,8 @@
 </head>
 
 <body>
-    <main>
+    <button onclick="toggleMarkMode()">🖊️</button>
+    <main id="root">
         <h1 id="book-name"></h1>
         <h2 id="book-author"></h2>
         <p id="container"></p>
@@ -85,15 +94,34 @@
                 const id = abbrev + chapter + ':' + verse.number;
                 container.innerHTML += `<span id="${id}"><sup>${verse.number}</sup> ${verse.text} </span>`;
             });
-
-            container.querySelectorAll('span').forEach(span =>
-                span.addEventListener('click', (event) => markupVerse(event.target))
-            )
         }
 
-        function markupVerse(verse) {
-            verse.classList.toggle('markup');
+        function markupVerse() {
+            const selObj = window.getSelection();
+
+            if (selObj.rangeCount > 0) {
+                const range = selObj.getRangeAt(0);
+                const selectedText = range.extractContents();
+
+                const span = document.createElement('mark');
+                span.appendChild(selectedText);
+                range.insertNode(span);
+
+                selObj.removeAllRanges();
+            }
         }
+
+        function toggleMarkMode() {
+            document.querySelector('#root').classList.toggle('mark');
+        }
+
+        document.addEventListener('mouseup', () => {
+            markModeOn = document.querySelector('#root').classList.contains('mark');
+
+            if (markModeOn && window.getSelection().toString()) {
+                markupVerse();
+            }
+        });
     </script>
 </body>
 
