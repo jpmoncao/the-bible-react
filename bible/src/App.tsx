@@ -88,28 +88,36 @@ function App() {
         chapter={chapter}
       />
       <div className='router-bible'>
-        <button onClick={handleChapterPrevious}>⬅️</button>
+        <button onClick={handleChapterPrevious}>
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" /></svg>
+        </button>
 
-        <select name="abbrev" id="abbrev" value={abbrev} onChange={handleBookChange} disabled={books && books.length === 0}>
-          <option value="" disabled>Livro...</option>
-          {
-            books && books.map((book, index) => (
-              <option key={index} value={book.abbrev.pt}>{book.name}</option>
-            ))
-          }
-        </select>
+        <div>
 
-        <select className='chapters' value={chapter} onChange={handleChapterChange} disabled={maxChapters === 0}>
-          {
-            maxChapters > 0 && (
-              Array.from({ length: maxChapters }, (_, index) => (
-                <option value={index + 1} key={index + 1}>{index + 1}</option>
+          <select name="abbrev" id="abbrev" value={abbrev} onChange={handleBookChange} disabled={books && books.length === 0}>
+            <option value="" disabled></option>
+            {
+              books && books.map((book, index) => (
+                <option key={index} value={book.abbrev.pt}>{book.name}</option>
               ))
-            )
-          }
-        </select>
+            }
+          </select>
 
-        <button onClick={handleChapterNext}>➡️</button>
+          <select className='chapters' value={chapter} onChange={handleChapterChange} disabled={maxChapters === 0}>
+            {
+              maxChapters > 0 && (
+                Array.from({ length: maxChapters }, (_, index) => (
+                  <option value={index + 1} key={index + 1}>{index + 1}</option>
+                ))
+              )
+            }
+          </select>
+
+        </div>
+
+        <button onClick={handleChapterNext}>
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" /></svg>
+        </button>
       </div>
     </>
   );
