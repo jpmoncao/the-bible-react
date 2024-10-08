@@ -1,0 +1,42 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    cursor: default;
+}
+
+main {
+    width: 60vw;
+    margin: 1rem auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    text-align: left;
+}
+
+#root.mark {
+    cursor: url('./assets/cursor/pen_l.cur'), auto;
+}
+
+h1 {
+    font-size: 1.4em;
+}
+
+h2 {
+    font-size: 1.2em;
+}
+
+span {
+    transition: .3s;
+}
+
+mark {
+    background-color: rgba(0, 255, 255, 0.5);
+    transition: .3s;
+}
