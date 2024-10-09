@@ -28,41 +28,6 @@ sup mark {
   margin: 0 0.25rem;
 }
 
-.router-bible {
-  display: flex;
-  justify-content: space-around;
-  position: fixed;
-  height: 3rem;
-  padding: 1rem 4rem;
-  top: calc(100vh - 5rem);
-  width: 100vw;
-  background-color: #1a1a1a;
-
-  div {
-    display: flex;
-    gap: 2rem;
-  }
-
-  button,
-  select {
-    height: 3rem;
-    border-radius: 12px;
-    border: 1px solid #dddddd25;
-    box-shadow: 0px 4px 0px #252525;
-    padding: 0.6em 1.2em;
-    font-size: 1em;
-    font-weight: 500;
-    font-family: inherit;
-    background-color: #1a1a1a;
-    cursor: pointer;
-    transition: border-color 0.25s;
-  }
-
-  select#abbrev {
-    width: 40vw;
-  }
-}
-
 .bubble-menu {
   background-color: #fefbff;
   border: 1px solid #888;

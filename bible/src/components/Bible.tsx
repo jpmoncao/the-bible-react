@@ -7,22 +7,14 @@ import StarterKit from '@tiptap/starter-kit';
 import Superscript from '@tiptap/extension-superscript';
 import Highlight from '@tiptap/extension-highlight';
 
-import axios from 'axios';
-import '../App.css';
-
-interface Verse {
-    number: number;
-    text: string;
-}
-
-interface Book {
-    name: string;
-    author: string;
-}
+import { BookSimple, Verse } from '../interfaces/interfaces';
+import api from '../services/api';
+import Paragraph from '@tiptap/extension-paragraph';
 
 interface PropsInterface {
     abbrev: string;
     chapter: number;
+    version: string;
 }
 
 interface handleShowBubbleMenuProps {
@@ -34,18 +26,16 @@ interface handleShowBubbleMenuProps {
     to: number;
 }
 
-const VERSION = 'nvi';
-const BASE_URL = 'https://www.abibliadigital.com.br/api/verses';
-
 export default function Bible(props: PropsInterface) {
-    const { abbrev, chapter } = props;
-    const [bookInfo, setBookInfo] = useState<{ book: Book; verses: Verse[] } | null>(null);
+    const { abbrev, chapter, version } = props;
+    const [bookInfo, setBookInfo] = useState<{ book: BookSimple; verses: Verse[] } | null>(null);
 
     const editor = useEditor({
         extensions: [
             Superscript,
             StarterKit,
             Highlight,
+            Paragraph
         ],
         content: '',
         editable: false
@@ -66,11 +56,7 @@ export default function Bible(props: PropsInterface) {
 
     useEffect(() => {
         if (abbrev.trim() !== '' && chapter > 0) {
-            axios.get(`${BASE_URL}/${VERSION}/${abbrev}/${chapter}`, {
-                headers: {
-                    Authorization: 'Bearer ' + import.meta.env.VITE_TOKEN_API
-                }
-            })
+            api.get(`/verses/${version}/${abbrev}/${chapter}`)
                 .then(response => {
                     const { book, verses } = response.data;
                     setBookInfo({ book, verses });
@@ -90,12 +76,12 @@ export default function Bible(props: PropsInterface) {
 
     return (
         <div>
-            <main className='bible-container'>
+            <main className='px-10 text-justify max-w-[680px]'>
                 {bookInfo ? (
                     <>
-                        <div style={{ display: 'flex', alignItems: 'flex-end', gap: '1rem' }}>
-                            <h1 id="book-name" style={{ margin: 0 }}>{bookInfo.book.name}</h1>
-                            <h3 id="book-author" style={{ margin: 0 }}>(de {bookInfo.book.author})</h3>
+                        <div className='flex items-end gap-4 my-12'>
+                            <h1 id="book-name" className='m-0'>{bookInfo.book.name}</h1>
+                            <h3 id="book-author" className='m-0'>(de {bookInfo.book.author})</h3>
                         </div>
                         {editor && (
                             <>
@@ -112,7 +98,7 @@ export default function Bible(props: PropsInterface) {
                             </>
                         )}
                     </>
-                ) : <p>Buscando...</p>}
+                ) : abbrev && chapter && (<p>Buscando...</p>)}
             </main>
         </div>
     );

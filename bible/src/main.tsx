@@ -12,8 +12,10 @@ import './index.css'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-      <Route path=":abbrev" element={<App />}>
-        <Route path=":chapter" element={<App />}></Route>
+      <Route path=":version" element={<App />}>
+        <Route path=":abbrev" element={<App />}>
+          <Route path=":chapter" element={<App />}></Route>
+        </Route>
       </Route>
     </Route>
   )
